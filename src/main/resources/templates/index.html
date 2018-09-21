@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>web-app</title>
+
+</head>
+<body>
+<div id="getResultDiv">
+
+    <table class="table">
+        <thead class="thead-light">
+               <tr>
+            <th scope="col">#</th>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Other phone</th>
+            <th scope="col">Options</th>
+        </tr>
+        </thead>
+        <tbody id="userTable">
+
+        </tbody>
+    </table>
+
+    <button id="getAllUsersId" type="button" class="btn btn-primary">Get All Customers</button>
+
+    <form id="add-user">
+        <div class="form-group" >
+            <input type="text" class="form-control" id="name" placeholder="Name">
+            <input type="text" class="form-control" id="email" placeholder="E-mail">
+            <input type="date" class="form-control" id="birthday" placeholder="E-mail">
+            <input type="tel" class="form-control" id="phone" placeholder="Phone">
+            <input type="text" class="form-control" id="phone2" placeholder="Other phone">
+        </div>
+
+        <button type="submit"  class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
