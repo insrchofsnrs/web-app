@@ -1,15 +1,18 @@
 package by.insrchofsnrs.webapp.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/")
 public class WebController {
 
-    @GetMapping(value="/")
-    public String homepage(Model model){
+    private final static String INDEX = "index";
 
-        return "index";
+    @GetMapping
+    public String homepage(){
+        return INDEX;
     }
+
 }

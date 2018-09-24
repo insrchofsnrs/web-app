@@ -1,4 +1,4 @@
-package by.insrchofsnrs.webapp.pojos;
+package by.insrchofsnrs.webapp.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +24,5 @@ public class User implements Serializable {
     private Date birthday;
     private String phone;
     private String phone2;
-
 
 }
