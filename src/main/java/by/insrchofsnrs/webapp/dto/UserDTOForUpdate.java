@@ -1,13 +1,15 @@
 package by.insrchofsnrs.webapp.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 
 @Data
-@Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTOForUpdate {
 
     private String name;

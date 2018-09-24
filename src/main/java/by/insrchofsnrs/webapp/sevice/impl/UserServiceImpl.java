@@ -8,14 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.List;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
 
     @Autowired
     private UserRepository userRepository;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(Long userId, UserDTOForUpdate userDTO) {
         User user = userRepository.findUserById(userId);
-        if (user!=null) {
+        if (user != null) {
             user.setBirthday(userDTO.getBirthday());
             user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
