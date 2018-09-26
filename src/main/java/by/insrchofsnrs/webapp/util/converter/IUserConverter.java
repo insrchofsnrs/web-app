@@ -4,6 +4,7 @@ import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
 import by.insrchofsnrs.webapp.pojo.User;
 
 public interface IUserConverter {
+
     /**
      * Create user from DTO.
      * @param dto

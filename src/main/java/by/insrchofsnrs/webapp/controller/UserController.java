@@ -26,22 +26,19 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         ArrayList<User> users = (ArrayList<User>) userService.getAllUsers();
-        if (users.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        //return new ResponseEntity<>(users, HttpStatus.OK);
         return ResponseEntity.ok(users);
     }
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user) {
-        try {
-            userService.createUser(user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } catch (HibernateQueryException e) {
-            e.printStackTrace();
+        ResponseEntity<User> result = new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+
+        User createdUser = userService.createUser(user);
+        if (createdUser.getId() != null) {
+            result = new ResponseEntity<>(createdUser, HttpStatus.OK);
         }
-        return new ResponseEntity<>(user, HttpStatus.CONFLICT);
+
+        return result;
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +54,7 @@ public class UserController {
         return result;
     }
 
+    //не знаю как тут проверить сохранился юзер или нет и при фейловом обновлении отправить BAD_REQUEST
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
                                            @RequestBody UserDTOForUpdateAndCreate userDTO) {

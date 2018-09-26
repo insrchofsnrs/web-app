@@ -4,70 +4,79 @@ import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.repository.UserRepository;
 import by.insrchofsnrs.webapp.sevice.UserService;
+import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserDTOConverter converter;
+
     @Override
     public User createUser(User user) {
+        User result = user;
         try {
-            userRepository.save(user);
+            result = userRepository.save(user);
             log.info("User created. User info{}", user);
-            return user;
         } catch (HibernateQueryException e) {
             log.error("Saving user in DB was failed. User {}", user);
         }
-        return null;
+        return result;
     }
 
     @Override
     public boolean deleteUser(Long userId) {
+        boolean result = false;
         try {
             userRepository.deleteById(userId);
             log.info("User was deleted. User id {}", userId);
-            return true;
+            result = true;
         } catch (HibernateQueryException e) {
             log.error("Deleting user by id was failed. User id {}", userId);
         }
-        return false;
+        return result;
     }
 
     @Override
     public List<User> getAllUsers() {
-        if (!userRepository.findAll().isEmpty()) {
-            log.info("Getting all users from db. Count {}", userRepository.findAll().size());
-            return userRepository.findAll();
+        List<User> result = null;
+        try {
+            result = userRepository.findAll();
+            log.info("Getting all users from db. Count {}", result);
+        } catch (HibernateQueryException e){
+            log.error("Getting all users from DB was failed.");
         }
-        log.error("Getting all users from DB was failed.");
-        return null;
+
+        return result;
     }
 
     @Override
     public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) {
-        User user = userRepository.findUserById(userId);
-        if (user != null) {
-            user.setBirthday(userDTO.getBirthday());
-            user.setName(userDTO.getName());
-            user.setEmail(userDTO.getEmail());
-            user.setPhone(userDTO.getPhone());
-            user.setPhone2(userDTO.getPhone2());
-            userRepository.save(user);
-            log.info("Success updating user. User: {}", user);
-            return user;
+
+        User result = null;
+
+        try {
+            result = userRepository.findUserById(userId);
+        } catch (HibernateQueryException e) {
+            log.error("User {} not found", userId, e.getMessage());
         }
-        log.error("Updating user was failed. User was not founded");
-        return null;
+
+        try {
+            result = userRepository.save(converter.createUserFromDTO(userDTO));
+            log.info("Success updating user. User: {}", result);
+        } catch (HibernateQueryException e) {
+            log.error("Updating user was failed.", e.getMessage());
+        }
+
+        return result;
     }
 }
