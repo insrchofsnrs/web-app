@@ -10,7 +10,7 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTOForUpdate {
+public class UserDTOForUpdateAndCreate {
 
     private String name;
     private String email;

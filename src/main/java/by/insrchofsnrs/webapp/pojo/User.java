@@ -3,15 +3,14 @@ package by.insrchofsnrs.webapp.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Data
+
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -25,4 +24,14 @@ public class User implements Serializable {
     private String phone;
     private String phone2;
 
+    public User() {
+    }
+
+    public User(String name, String email, Date birthday, String phone, String phone2) {
+        this.name = name;
+        this.email = email;
+        this.birthday = birthday;
+        this.phone = phone;
+        this.phone2 = phone2;
+    }
 }

@@ -1,6 +1,6 @@
 package by.insrchofsnrs.webapp.sevice.impl;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdate;
+import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.repository.UserRepository;
 import by.insrchofsnrs.webapp.sevice.UserService;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, UserDTOForUpdate userDTO) {
+    public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) {
         User user = userRepository.findUserById(userId);
         if (user != null) {
             user.setBirthday(userDTO.getBirthday());
