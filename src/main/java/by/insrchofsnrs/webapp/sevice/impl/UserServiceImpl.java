@@ -6,19 +6,19 @@ import by.insrchofsnrs.webapp.repository.UserRepository;
 import by.insrchofsnrs.webapp.sevice.UserService;
 import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 import java.util.List;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     private UserDTOConverter converter;
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         try {
             result = userRepository.findAll();
             log.info("Getting all users from db. Count {}", result);
-        } catch (HibernateQueryException e){
+        } catch (HibernateQueryException e) {
             log.error("Getting all users from DB was failed.");
         }
 
