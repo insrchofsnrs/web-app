@@ -1,34 +1,71 @@
 package by.insrchofsnrs.webapp;
 
-import by.insrchofsnrs.webapp.controller.UserController;
+import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.sevice.UserService;
+import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
+import java.sql.Date;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
+@SpringBootTest
 public class UserServiceTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private UserService userService;
 
-    @MockBean
-    private UserController userController;
+    @Autowired
+    private UserDTOConverter converter;
+
+    UserDTOForUpdateAndCreate userDTO = new UserDTOForUpdateAndCreate(
+            "alex",
+            "alex@hmail.com",
+            new Date(123213212312L),
+            "111111111",
+            "222222222"
+    );
 
     @Test
-    public void firstTestIHaveNOIdeaAboutWhat() {
-        User user = new User();
-        user.setName("Test USer");
-        when(userController.addUser(user)).thenReturn(new ResponseEntity<>(user, HttpStatus.CREATED));
+    public void userCreateTest() {
+        assertNotNull(userService.createUser(userDTO).getId());
+    }
+
+    @Test
+    public void getAllUsersTest() {
+        userService.createUser(userDTO);
+        assertFalse(userService.getAllUsers().isEmpty());
+    }
+
+    @Test
+    public void deleteUserTest() {
+        User user = userService.createUser(userDTO);
+        assertTrue(userService.deleteUser(user.getId()));
+    }
+
+    @Test
+    public void updateUserTest() {
+        User user = userService.createUser(userDTO);
+
+        UserDTOForUpdateAndCreate userDTO = converter.createDTOFromUser(user);
+        userDTO.setEmail("test@email.com");
+        userDTO.setName("Loli");
+        userDTO.setPhone("test phone");
+        userDTO.setPhone2("test phone 2");
+
+        User updatedUser = userService.updateUser(user.getId(), userDTO);
+
+        assertEquals(updatedUser.getId(), user.getId());
+        assertEquals(updatedUser.getName(), userDTO.getName());
+        assertEquals(updatedUser.getEmail(), userDTO.getEmail());
+        assertEquals(updatedUser.getPhone(), userDTO.getPhone());
+        assertEquals(updatedUser.getPhone2(), userDTO.getPhone2());
+        assertEquals(updatedUser.getBirthday(), userDTO.getBirthday());
     }
 }

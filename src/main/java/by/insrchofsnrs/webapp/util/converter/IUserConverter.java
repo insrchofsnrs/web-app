@@ -8,14 +8,14 @@ public interface IUserConverter {
     /**
      * Create user from DTO.
      * @param dto
-     * @return
+     * @return User
      */
     User createUserFromDTO (UserDTOForUpdateAndCreate dto);
 
     /**
      * Create DTO from user.
      * @param user
-     * @return
+     * @return UserDTO
      */
     UserDTOForUpdateAndCreate createDTOFromUser (User user);
 

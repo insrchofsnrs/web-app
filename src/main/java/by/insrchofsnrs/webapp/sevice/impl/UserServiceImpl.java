@@ -22,13 +22,14 @@ public class UserServiceImpl implements UserService {
     private UserDTOConverter converter;
 
     @Override
-    public User createUser(User user) {
-        User result = user;
+    public User createUser(UserDTOForUpdateAndCreate userDTO) {
+        //Если все плохо получается вернет пустого юзвера? надо наверное после конвертера возращать его
+        User result = new User();
         try {
-            result = userRepository.save(user);
-            log.info("User created. User info{}", user);
+            result = userRepository.save(converter.createUserFromDTO(userDTO));
+            log.info("User created. User info{}", result);
         } catch (HibernateQueryException e) {
-            log.error("Saving user in DB was failed. User {}", user);
+            log.error("Saving user in DB was failed. User {}", userDTO);
         }
         return result;
     }
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    // подумать, херня какаято в методе, не понятно что возвращается, и что происходит в первом трай-кетче.
     @Override
     public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) {
 
@@ -70,8 +72,11 @@ public class UserServiceImpl implements UserService {
             log.error("User {} not found", userId, e.getMessage());
         }
 
+        User newUser = converter.createUserFromDTO(userDTO);
+        newUser.setId(userId);
+
         try {
-            result = userRepository.save(converter.createUserFromDTO(userDTO));
+            result = userRepository.save(newUser);
             log.info("Success updating user. User: {}", result);
         } catch (HibernateQueryException e) {
             log.error("Updating user was failed.", e.getMessage());

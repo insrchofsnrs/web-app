@@ -30,10 +30,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        ResponseEntity<User> result = new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
-
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<User> addUser(@RequestBody UserDTOForUpdateAndCreate userDTO) {
+        User createdUser = userService.createUser(userDTO);
+        ResponseEntity<User> result = new ResponseEntity<>(createdUser, HttpStatus.BAD_REQUEST);
         if (createdUser.getId() != null) {
             result = new ResponseEntity<>(createdUser, HttpStatus.OK);
         }
