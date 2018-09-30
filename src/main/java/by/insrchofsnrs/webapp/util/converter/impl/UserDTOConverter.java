@@ -10,21 +10,29 @@ public class UserDTOConverter implements IUserConverter {
 
     @Override
     public User createUserFromDTO(UserDTOForUpdateAndCreate dto) {
-        return new User(
-                dto.getName(),
-                dto.getEmail(),
-                dto.getBirthday(),
-                dto.getPhone(),
-                dto.getPhone2());
+
+        User result = new User();
+
+        result.setName(dto.getName());
+        result.setEmail(dto.getEmail());
+        result.setBirthday(dto.getBirthday());
+        result.setPhone(dto.getPhone());
+        result.setPhone2(dto.getPhone2());
+
+        return result;
     }
 
     @Override
     public UserDTOForUpdateAndCreate createDTOFromUser(User user) {
-        return new UserDTOForUpdateAndCreate(
-                user.getName(),
-                user.getEmail(),
-                user.getBirthday(),
-                user.getPhone(),
-                user.getPhone2());
+
+        UserDTOForUpdateAndCreate result = new UserDTOForUpdateAndCreate();
+
+        result.setName(user.getName());
+        result.setEmail(user.getEmail());
+        result.setBirthday(user.getBirthday());
+        result.setPhone(user.getPhone());
+        result.setPhone2(user.getPhone2());
+
+        return result;
     }
 }

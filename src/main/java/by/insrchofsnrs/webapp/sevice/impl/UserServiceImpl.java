@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
             result = userRepository.save(converter.createUserFromDTO(userDTO));
             log.info("User created. User info{}", result);
         } catch (HibernateQueryException e) {
-            log.error("Saving user in DB was failed. User {}", userDTO);
+            log.error("Saving user in DB was failed. User {}", userDTO, e.getMessage());
         }
         return result;
     }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
             log.info("User was deleted. User id {}", userId);
             result = true;
         } catch (HibernateQueryException e) {
-            log.error("Deleting user by id was failed. User id {}", userId);
+            log.error("Deleting user by id was failed. User id {}", userId, e.getMessage());
         }
         return result;
     }
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
             result = userRepository.findAll();
             log.info("Getting all users from db. Count {}", result);
         } catch (HibernateQueryException e) {
-            log.error("Getting all users from DB was failed.");
+            log.error("Getting all users from DB was failed.", e.getMessage());
         }
 
         return result;

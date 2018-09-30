@@ -1,9 +1,11 @@
 package by.insrchofsnrs.webapp;
 
+
 import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.sevice.UserService;
 import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +29,27 @@ public class UserServiceTest {
     UserDTOForUpdateAndCreate userDTO = new UserDTOForUpdateAndCreate(
             "alex",
             "alex@hmail.com",
-            new Date(123213212312L),
+            new Date(423213212312L),
             "111111111",
             "222222222"
     );
 
     @Test
     public void userCreateTest() {
-        assertNotNull(userService.createUser(userDTO).getId());
+        User user = userService.createUser(userDTO);
+
+        assertNotNull(user.getId());
+        assertEquals(user.getBirthday(), userDTO.getBirthday());
+        assertEquals(user.getEmail(), userDTO.getEmail());
+        assertEquals(user.getName(), userDTO.getName());
+        assertEquals(user.getPhone(), userDTO.getPhone());
+        assertEquals(user.getPhone2(), userDTO.getPhone2());
     }
 
     @Test
     public void getAllUsersTest() {
         userService.createUser(userDTO);
-        assertFalse(userService.getAllUsers().isEmpty());
+        assertTrue(CollectionUtils.isNotEmpty(userService.getAllUsers()));
     }
 
     @Test
