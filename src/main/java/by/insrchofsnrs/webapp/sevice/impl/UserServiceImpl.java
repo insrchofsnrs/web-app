@@ -60,17 +60,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    // подумать, херня какаято в методе, не понятно что возвращается, и что происходит в первом трай-кетче.
+
     @Override
-    public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) {
+    public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) throws HibernateQueryException {
 
-        User result = null;
+        User result;
 
-        try {
-            result = userRepository.findUserById(userId);
-        } catch (HibernateQueryException e) {
-            log.error("User {} not found", userId, e.getMessage());
-        }
+        result = userRepository.findUserById(userId);
 
         User newUser = converter.createUserFromDTO(userDTO);
         newUser.setId(userId);

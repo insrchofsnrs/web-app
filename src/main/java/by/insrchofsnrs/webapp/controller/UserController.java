@@ -53,11 +53,18 @@ public class UserController {
         return result;
     }
 
-    //не знаю как тут проверить сохранился юзер или нет и при фейловом обновлении отправить BAD_REQUEST
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
                                            @RequestBody UserDTOForUpdateAndCreate userDTO) {
-        User user = userService.updateUser(id, userDTO);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        ResponseEntity<User> result;
+        try{
+            User user = userService.updateUser(id, userDTO);
+            result = new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (HibernateQueryException e) {
+            log.error("User was not updated. User id {}", id, e.getMessage());
+            result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return result;
     }
 }
