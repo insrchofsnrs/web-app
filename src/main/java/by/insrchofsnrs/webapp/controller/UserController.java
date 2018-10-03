@@ -62,20 +62,23 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable("id") Long id,
-                                           @Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
+    public ResponseEntity<?> updateUser(@PathVariable("id") String id,
+                                        @Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
                                         BindingResult bindingResult) {
+
         ResponseEntity<?> result;
         if (bindingResult.hasErrors()){
             result = new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
             log.warn("валидация тест {}", bindingResult.getAllErrors());
         } else {
             try {
-                User user = userService.updateUser(id, userDTO);
+                Long userId = Long.parseLong(id);
+                User user = userService.updateUser(userId, userDTO);
                 result = new ResponseEntity<>(user, HttpStatus.OK);
-            } catch (HibernateQueryException e) {
-                log.error("User was not updated. User id {}", id, e.getMessage());
-                result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } catch (HibernateQueryException | NumberFormatException e) {
+                log.warn("User was not updated. {}", e.getMessage());
+                String error = e.getMessage();
+                result = new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
             }
         }
         return result;
