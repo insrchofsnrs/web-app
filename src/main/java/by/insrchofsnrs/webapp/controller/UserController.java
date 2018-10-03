@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateQueryException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,10 +32,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody UserDTOForUpdateAndCreate userDTO) {
-        User createdUser = userService.createUser(userDTO);
-        ResponseEntity<User> result = new ResponseEntity<>(createdUser, HttpStatus.BAD_REQUEST);
-        if (createdUser.getId() != null) {
+    public ResponseEntity<?> addUser(@Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
+                                     BindingResult bindingResult) {
+
+        ResponseEntity<?> result;
+
+        if (bindingResult.hasErrors()) {
+            result = new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            log.warn("валидация тест {}", bindingResult.getAllErrors());
+        } else {
+            User createdUser = userService.createUser(userDTO);
             result = new ResponseEntity<>(createdUser, HttpStatus.OK);
         }
 
@@ -54,17 +62,22 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-                                           @RequestBody UserDTOForUpdateAndCreate userDTO) {
-        ResponseEntity<User> result;
-        try{
-            User user = userService.updateUser(id, userDTO);
-            result = new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (HibernateQueryException e) {
-            log.error("User was not updated. User id {}", id, e.getMessage());
-            result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id,
+                                           @Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
+                                        BindingResult bindingResult) {
+        ResponseEntity<?> result;
+        if (bindingResult.hasErrors()){
+            result = new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            log.warn("валидация тест {}", bindingResult.getAllErrors());
+        } else {
+            try {
+                User user = userService.updateUser(id, userDTO);
+                result = new ResponseEntity<>(user, HttpStatus.OK);
+            } catch (HibernateQueryException e) {
+                log.error("User was not updated. User id {}", id, e.getMessage());
+                result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
-
         return result;
     }
 }
