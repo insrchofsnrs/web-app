@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +28,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addUser(@Validated @RequestBody UserDto userDTO) {
+    public ResponseEntity<?> addUser(@Validated @RequestBody UserDto userDto) {
 
         ResponseEntity<?> result;
 
-            User createdUser = userService.createUser(userDTO);
-            result = new ResponseEntity<>(createdUser, HttpStatus.OK);
+        User createdUser = userService.createUser(userDto);
+        result = new ResponseEntity<>(createdUser, HttpStatus.OK);
 
         return result;
     }
@@ -42,23 +41,19 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") String id) {
         ResponseEntity<User> result;
-        try {
-            userService.deleteUser(id);
-            result = new ResponseEntity<>(HttpStatus.OK);
-        } catch (HibernateQueryException e) {
-            log.error("При удалении юзера что-то пошло не так!");
-            result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        userService.deleteUser(id);
+        result = new ResponseEntity<>(HttpStatus.OK);
+
         return result;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") String id,
-                                        @Validated @RequestBody UserDto userDTO) {
+                                        @Validated @RequestBody UserDto userDto) {
 
         ResponseEntity<?> result;
 
-        User user = userService.updateUser(id, userDTO);
+        User user = userService.updateUser(id, userDto);
         result = new ResponseEntity<>(user, HttpStatus.OK);
 
         return result;

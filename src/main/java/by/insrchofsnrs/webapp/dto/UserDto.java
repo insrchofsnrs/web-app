@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -15,9 +16,11 @@ import java.util.Date;
 public class UserDto {
     @NotNull
     private String name;
+
     @Email
     private String email;
 
+    @Past
     private Date birthday;
 
     @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", flags = Pattern.Flag.UNICODE_CASE,

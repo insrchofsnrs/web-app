@@ -13,7 +13,7 @@ public interface UserService {
      * @param userDTO
      * @return user after creation
      */
-    User createUser(UserDto userDTO);
+    User createUser(UserDto userDto);
 
     /**
      * Delete user by id.
@@ -33,7 +33,7 @@ public interface UserService {
      * @param id, userDTO
      * @return updated user or non-updated user
      */
-    User updateUser (String id, UserDto userDTO);
+    User updateUser (String id, UserDto userDto);
 }
 
 

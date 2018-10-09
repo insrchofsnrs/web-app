@@ -24,14 +24,14 @@ public class UserServiceImpl implements UserService {
     private UserDTOConverter converter;
 
     @Override
-    public User createUser(UserDto userDTO) {
+    public User createUser(UserDto userDto) {
         //Если все плохо получается вернет пустого юзвера? надо наверное после конвертера возращать его
         User result = new User();
         try {
-            result = userRepository.save(converter.createUserFromDTO(userDTO));
+            result = userRepository.save(converter.createUserFromDTO(userDto));
             log.info("User created. User info{}", result);
         } catch (HibernateQueryException e) {
-            log.error("Saving user in DB was failed. User {}", userDTO, e.getMessage());
+            log.error("Saving user in DB was failed. User {}", userDto, e.getMessage());
         }
         return result;
     }
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(String id, UserDto userDTO) {
+    public User updateUser(String id, UserDto userDto) {
 
         User result = new User();
         Long userId = Long.parseLong(id);
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         if (!user.isPresent()){
             throw new UserNotFoundException("User id: " + userId);
         }
-        User newUser = converter.createUserFromDTO(userDTO);
+        User newUser = converter.createUserFromDTO(userDto);
         newUser.setId(userId);
         try {
             result = userRepository.save(newUser);
