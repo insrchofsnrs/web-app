@@ -55,7 +55,7 @@ public class UserServiceTest {
     @Test
     public void deleteUserTest() {
         User user = userService.createUser(userDTO);
-        assertTrue(userService.deleteUser(user.getId()));
+        assertTrue(userService.deleteUser(user.getId().toString()));
     }
 
     @Test
