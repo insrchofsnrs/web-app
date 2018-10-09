@@ -1,6 +1,6 @@
 package by.insrchofsnrs.webapp.util.converter;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
 
 public interface IUserConverter {
@@ -10,14 +10,14 @@ public interface IUserConverter {
      * @param dto
      * @return User
      */
-    User createUserFromDTO (UserDTOForUpdateAndCreate dto);
+    User createUserFromDTO (UserDto dto);
 
     /**
      * Create DTO from user.
      * @param user
      * @return UserDTO
      */
-    UserDTOForUpdateAndCreate createDTOFromUser (User user);
+    UserDto createDTOFromUser (User user);
 
 
 }

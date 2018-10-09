@@ -1,10 +1,9 @@
 package by.insrchofsnrs.webapp;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.util.converter.IUserConverter;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class UserDTOConverterTest {
             "awwdawd");
 
 
-    private UserDTOForUpdateAndCreate userDTO = new UserDTOForUpdateAndCreate (
+    private UserDto userDTO = new UserDto(
             "alex",
             "alex@hmail.com",
             new Date(123213212312L),

@@ -1,18 +1,15 @@
 package by.insrchofsnrs.webapp.controller;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
-
 import by.insrchofsnrs.webapp.sevice.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.hibernate5.HibernateQueryException;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,24 +29,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addUser(@Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
-                                     BindingResult bindingResult) {
+    public ResponseEntity<?> addUser(@Validated @RequestBody UserDto userDTO) {
 
         ResponseEntity<?> result;
 
-        if (bindingResult.hasErrors()) {
-            result = new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
-            log.warn("валидация тест {}", bindingResult.getAllErrors());
-        } else {
             User createdUser = userService.createUser(userDTO);
             result = new ResponseEntity<>(createdUser, HttpStatus.OK);
-        }
 
         return result;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") String id) {
         ResponseEntity<User> result;
         try {
             userService.deleteUser(id);
@@ -63,24 +54,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") String id,
-                                        @Validated @RequestBody UserDTOForUpdateAndCreate userDTO,
-                                        BindingResult bindingResult) {
+                                        @Validated @RequestBody UserDto userDTO) {
 
         ResponseEntity<?> result;
-        if (bindingResult.hasErrors()){
-            result = new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
-            log.warn("валидация тест {}", bindingResult.getAllErrors());
-        } else {
-            try {
-                Long userId = Long.parseLong(id);
-                User user = userService.updateUser(userId, userDTO);
-                result = new ResponseEntity<>(user, HttpStatus.OK);
-            } catch (HibernateQueryException | NumberFormatException e) {
-                log.warn("User was not updated. {}", e.getMessage());
-                String error = e.getMessage();
-                result = new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            }
-        }
+
+        User user = userService.updateUser(id, userDTO);
+        result = new ResponseEntity<>(user, HttpStatus.OK);
+
         return result;
     }
 }

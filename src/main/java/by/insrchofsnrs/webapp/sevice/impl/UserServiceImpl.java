@@ -1,6 +1,7 @@
 package by.insrchofsnrs.webapp.sevice.impl;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
+import by.insrchofsnrs.webapp.exception.UserNotFoundException;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.repository.UserRepository;
 import by.insrchofsnrs.webapp.sevice.UserService;
@@ -10,6 +11,7 @@ import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserDTOConverter converter;
 
     @Override
-    public User createUser(UserDTOForUpdateAndCreate userDTO) {
+    public User createUser(UserDto userDTO) {
         //Если все плохо получается вернет пустого юзвера? надо наверное после конвертера возращать его
         User result = new User();
         try {
@@ -35,8 +37,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(String id) {
         boolean result = false;
+        Long userId = Long.parseLong(id);
+        Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent()){
+            throw new UserNotFoundException("User id: " + userId);
+        }
+
         try {
             userRepository.deleteById(userId);
             log.info("User was deleted. User id {}", userId);
@@ -62,22 +71,23 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(Long userId, UserDTOForUpdateAndCreate userDTO) throws HibernateQueryException {
+    public User updateUser(String id, UserDto userDTO) {
 
-        User result;
+        User result = new User();
+        Long userId = Long.parseLong(id);
+        Optional<User> user = userRepository.findById(userId);
 
-        result = userRepository.findUserById(userId);
-
+        if (!user.isPresent()){
+            throw new UserNotFoundException("User id: " + userId);
+        }
         User newUser = converter.createUserFromDTO(userDTO);
         newUser.setId(userId);
-
         try {
             result = userRepository.save(newUser);
             log.info("Success updating user. User: {}", result);
         } catch (HibernateQueryException e) {
             log.error("Updating user was failed.", e.getMessage());
         }
-
         return result;
     }
 }

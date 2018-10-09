@@ -6,18 +6,25 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
-
+import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTOForUpdateAndCreate {
+public class UserDto {
     @NotNull
     private String name;
     @Email
     private String email;
+
     private Date birthday;
+
+    @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", flags = Pattern.Flag.UNICODE_CASE,
+             message = "number format +1234567890")
     private String phone;
+
+    @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", flags = Pattern.Flag.UNICODE_CASE,
+             message = "number format +1234567890")
     private String phone2;
 }

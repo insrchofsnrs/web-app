@@ -1,6 +1,6 @@
 package by.insrchofsnrs.webapp.sevice;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,14 +13,14 @@ public interface UserService {
      * @param userDTO
      * @return user after creation
      */
-    User createUser(UserDTOForUpdateAndCreate userDTO);
+    User createUser(UserDto userDTO);
 
     /**
      * Delete user by id.
      * @param userId
      * @return true if user was deleted
      */
-    boolean deleteUser(Long userId);
+    boolean deleteUser(String userId);
 
     /**
      * Get all users.
@@ -33,7 +33,7 @@ public interface UserService {
      * @param id, userDTO
      * @return updated user or non-updated user
      */
-    User updateUser (Long id, UserDTOForUpdateAndCreate userDTO);
+    User updateUser (String id, UserDto userDTO);
 }
 
 
