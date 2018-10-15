@@ -1,5 +1,7 @@
 package by.insrchofsnrs.webapp.exception;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 @RestController
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Autowired
+    Converter<MethodArgumentNotValidException, List<InvalidFieldsUserDto>> converter;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -24,15 +28,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                                                                   HttpStatus status,
                                                                   WebRequest request) {
 
-        List<InvalidFieldsUserDto> errors = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .map((p)-> new InvalidFieldsUserDto(p.getDefaultMessage(), p.getField(), p.getRejectedValue()))
-                .collect(Collectors.toList());
-
-
-        ExceptionResponseUserValid exceptionResponce = new ExceptionResponseUserValid(new Date(),
-                "Validation failed", ex.getBindingResult().toString(), errors);
-        return new ResponseEntity<>(exceptionResponce, HttpStatus.BAD_REQUEST);
+        ExceptionResponseUserValid exceptionResponse = new ExceptionResponseUserValid(new Date(),
+                "Validation failed", ex.getMessage(), converter.convert(ex));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)

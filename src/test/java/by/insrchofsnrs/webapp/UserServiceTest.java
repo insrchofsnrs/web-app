@@ -64,17 +64,19 @@ public class UserServiceTest {
 
         UserDto userDTO = converter.createDTOFromUser(user);
         userDTO.setEmail("test@email.com");
-        userDTO.setName("Loli");
+        userDTO.setName(null);
         userDTO.setPhone("test phone");
         userDTO.setPhone2("test phone 2");
 
-        User updatedUser = userService.updateUser(user.getId().toString(), userDTO);
+        User updatedUser = userService.updateUser("add", userDTO);
         System.out.println(user.getId().toString());
         assertEquals(updatedUser.getId(), user.getId());
-        assertEquals(updatedUser.getName(), userDTO.getName());
+        assertEquals(updatedUser.getName(), "alex");
         assertEquals(updatedUser.getEmail(), userDTO.getEmail());
         assertEquals(updatedUser.getPhone(), userDTO.getPhone());
         assertEquals(updatedUser.getPhone2(), userDTO.getPhone2());
         assertEquals(updatedUser.getBirthday(), userDTO.getBirthday());
+
+        System.out.println(updatedUser);
     }
 }

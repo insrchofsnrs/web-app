@@ -5,8 +5,10 @@ import by.insrchofsnrs.webapp.exception.UserNotFoundException;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.repository.UserRepository;
 import by.insrchofsnrs.webapp.sevice.UserService;
+import by.insrchofsnrs.webapp.util.converter.IMerger;
 import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDTOConverter converter;
+
+    @Autowired
+    private IMerger<User, UserDto> merger;
 
     @Override
     public User createUser(UserDto userDto) {
@@ -73,21 +78,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(String id, UserDto userDto) {
 
-        User result = new User();
-        Long userId = Long.parseLong(id);
+        User result;
+        long userId;
+        try {
+            userId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            log.warn("ID isn`t number. Details {}", e.getMessage());
+            throw new UserNotFoundException("ID is not number");
+        }
+
         Optional<User> user = userRepository.findById(userId);
 
         if (!user.isPresent()){
             throw new UserNotFoundException("User id: " + userId);
         }
-        User newUser = converter.createUserFromDTO(userDto);
-        newUser.setId(userId);
+
+
+        result = merger.merge(user.get(), userDto);
+        result.setId(userId);
         try {
-            result = userRepository.save(newUser);
+            userRepository.save(result);
             log.info("Success updating user. User: {}", result);
         } catch (HibernateQueryException e) {
             log.error("Updating user was failed.", e.getMessage());
         }
+
         return result;
     }
 }

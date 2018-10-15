@@ -10,7 +10,7 @@ public interface UserService {
 
     /**
      * Create users.
-     * @param userDTO
+     * @param userDto
      * @return user after creation
      */
     User createUser(UserDto userDto);
@@ -30,7 +30,7 @@ public interface UserService {
 
     /**
      * Update user.
-     * @param id, userDTO
+     * @param id, userDto
      * @return updated user or non-updated user
      */
     User updateUser (String id, UserDto userDto);
