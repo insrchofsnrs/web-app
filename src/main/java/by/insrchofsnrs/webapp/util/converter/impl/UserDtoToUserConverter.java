@@ -19,13 +19,17 @@ public class UserDtoToUserConverter implements IMerger<User, UserDto> {
         String phone;
         String phone2;
         */
+        User result = null;
 
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setBirthday(userDto.getBirthday());
-        user.setPhone(userDto.getPhone());
-        user.setPhone2(userDto.getPhone2());
+        if(!(user==null || userDto==null)) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setBirthday(userDto.getBirthday());
+            user.setPhone(userDto.getPhone());
+            user.setPhone2(userDto.getPhone2());
+            result = user;
+        }
 
-        return user;
+        return result;
     }
 }
