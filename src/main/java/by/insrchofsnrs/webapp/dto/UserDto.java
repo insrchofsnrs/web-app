@@ -1,5 +1,6 @@
 package by.insrchofsnrs.webapp.dto;
 
+import by.insrchofsnrs.webapp.exception.ValidUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ValidUser(message = "заполни телефон")
 public class UserDto {
     @NotNull
     private String name;

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateQueryException;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
         Long userId = Long.parseLong(id);
         Optional<User> user = userRepository.findById(userId);
 
-        if (!user.isPresent()){
+        if (!user.isPresent()) {
             throw new UserNotFoundException("User id: " + userId);
         }
 
@@ -89,12 +90,19 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> user = userRepository.findById(userId);
 
-        if (!user.isPresent()){
+        if (!user.isPresent()) {
             throw new UserNotFoundException("User id: " + userId);
         }
 
+        /*
+            merger = (t, k) -> {
+            t.setPhone(k.getPhone());
+            return t;
+            };
+        */
 
         result = merger.merge(user.get(), userDto);
+
         result.setId(userId);
         try {
             userRepository.save(result);

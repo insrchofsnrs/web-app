@@ -29,7 +29,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                                                                   WebRequest request) {
 
         ExceptionResponseUserValid exceptionResponse = new ExceptionResponseUserValid(new Date(),
-                "Validation failed", ex.getMessage(), converter.convert(ex));
+               //"Validation failed",
+                ex.getBindingResult().getAllErrors().stream().findFirst().get().getDefaultMessage(),
+                ex.getMessage(), converter.convert(ex));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
