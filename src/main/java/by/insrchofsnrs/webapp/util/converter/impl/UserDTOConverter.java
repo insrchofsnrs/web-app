@@ -1,6 +1,6 @@
 package by.insrchofsnrs.webapp.util.converter.impl;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.util.converter.IUserConverter;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UserDTOConverter implements IUserConverter {
 
     @Override
-    public User createUserFromDTO(UserDTOForUpdateAndCreate dto) {
+    public User createUserFromDTO(UserDto dto) {
 
         User result = new User();
 
@@ -23,9 +23,9 @@ public class UserDTOConverter implements IUserConverter {
     }
 
     @Override
-    public UserDTOForUpdateAndCreate createDTOFromUser(User user) {
+    public UserDto createDTOFromUser(User user) {
 
-        UserDTOForUpdateAndCreate result = new UserDTOForUpdateAndCreate();
+        UserDto result = new UserDto();
 
         result.setName(user.getName());
         result.setEmail(user.getEmail());

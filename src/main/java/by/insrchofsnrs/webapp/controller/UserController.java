@@ -1,16 +1,14 @@
 package by.insrchofsnrs.webapp.controller;
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
-
 import by.insrchofsnrs.webapp.sevice.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.hibernate5.HibernateQueryException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,34 +28,34 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody UserDTOForUpdateAndCreate userDTO) {
-        User createdUser = userService.createUser(userDTO);
-        ResponseEntity<User> result = new ResponseEntity<>(createdUser, HttpStatus.BAD_REQUEST);
-        if (createdUser.getId() != null) {
-            result = new ResponseEntity<>(createdUser, HttpStatus.OK);
-        }
+    public ResponseEntity<?> addUser(@Validated @RequestBody UserDto userDto) {
+
+        ResponseEntity<?> result;
+
+        User createdUser = userService.createUser(userDto);
+        result = new ResponseEntity<>(createdUser, HttpStatus.OK);
 
         return result;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") String id) {
         ResponseEntity<User> result;
-        try {
-            userService.deleteUser(id);
-            result = new ResponseEntity<>(HttpStatus.OK);
-        } catch (HibernateQueryException e) {
-            log.error("При удалении юзера что-то пошло не так!");
-            result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        userService.deleteUser(id);
+        result = new ResponseEntity<>(HttpStatus.OK);
+
         return result;
     }
 
-    //не знаю как тут проверить сохранился юзер или нет и при фейловом обновлении отправить BAD_REQUEST
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-                                           @RequestBody UserDTOForUpdateAndCreate userDTO) {
-        User user = userService.updateUser(id, userDTO);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<?> updateUser(@PathVariable("id") String id,
+                                        @Validated @RequestBody UserDto userDto) {
+
+        ResponseEntity<?> result;
+
+        User user = userService.updateUser(id, userDto);
+        result = new ResponseEntity<>(user, HttpStatus.OK);
+
+        return result;
     }
 }

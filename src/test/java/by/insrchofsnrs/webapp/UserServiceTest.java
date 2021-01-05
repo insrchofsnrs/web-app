@@ -1,7 +1,7 @@
 package by.insrchofsnrs.webapp;
 
 
-import by.insrchofsnrs.webapp.dto.UserDTOForUpdateAndCreate;
+import by.insrchofsnrs.webapp.dto.UserDto;
 import by.insrchofsnrs.webapp.pojo.User;
 import by.insrchofsnrs.webapp.sevice.UserService;
 import by.insrchofsnrs.webapp.util.converter.impl.UserDTOConverter;
@@ -26,7 +26,7 @@ public class UserServiceTest {
     @Autowired
     private UserDTOConverter converter;
 
-    UserDTOForUpdateAndCreate userDTO = new UserDTOForUpdateAndCreate(
+    UserDto userDTO = new UserDto(
             "alex",
             "alex@hmail.com",
             new Date(423213212312L),
@@ -55,26 +55,28 @@ public class UserServiceTest {
     @Test
     public void deleteUserTest() {
         User user = userService.createUser(userDTO);
-        assertTrue(userService.deleteUser(user.getId()));
+        assertTrue(userService.deleteUser(user.getId().toString()));
     }
 
     @Test
     public void updateUserTest() {
         User user = userService.createUser(userDTO);
 
-        UserDTOForUpdateAndCreate userDTO = converter.createDTOFromUser(user);
+        UserDto userDTO = converter.createDTOFromUser(user);
         userDTO.setEmail("test@email.com");
-        userDTO.setName("Loli");
+        userDTO.setName(null);
         userDTO.setPhone("test phone");
         userDTO.setPhone2("test phone 2");
 
-        User updatedUser = userService.updateUser(user.getId(), userDTO);
-
+        User updatedUser = userService.updateUser("add", userDTO);
+        System.out.println(user.getId().toString());
         assertEquals(updatedUser.getId(), user.getId());
-        assertEquals(updatedUser.getName(), userDTO.getName());
+        assertEquals(updatedUser.getName(), "alex");
         assertEquals(updatedUser.getEmail(), userDTO.getEmail());
         assertEquals(updatedUser.getPhone(), userDTO.getPhone());
         assertEquals(updatedUser.getPhone2(), userDTO.getPhone2());
         assertEquals(updatedUser.getBirthday(), userDTO.getBirthday());
+
+        System.out.println(updatedUser);
     }
 }

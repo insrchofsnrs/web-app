@@ -2,9 +2,11 @@ package by.insrchofsnrs.webapp.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
 @Data
